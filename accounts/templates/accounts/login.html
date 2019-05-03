@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'accounts/style.css' %}">
+</head>
+<body class="">
+	<div id="header">
+		<h1>
+			<a class="main_logo"></a>
+		</h1>
+	</div>
+	<div id="container">
+		<div id="content">
+			<form method="post" action="{% url 'login'%}">
+			{% csrf_token %}
+				<div class="id_area">
+					<div class="input_row">
+						<span class="input_box">
+							<input id="username" class="int" type="text" name="username" placeholder="메일주소" maxlength="41">
+						</span>
+					</div>
+				</div>
+				<div class="pw_area">
+					<div class="input_row">
+						<span class="input_box">
+							<input id="password" class="int" type="password" name="password" placeholder="비밀번호" maxlength="16">
+						</span>
+					</div>
+				</div>
+				{% if form.errors %}
+					<div class="error">
+						<p>
+						    메일주소 또는 비밀번호를 잘못 입력하셨습니다.
+						</p>
+					</div>
+				{% endif %}
+
+
+				<input class="btn_global" type="submit" value="로그인" title="로그인">
+			</form>
+			<div class="find_info">
+				<a id="singup" href="../signup">회원가입</a>
+				
+				<span class="bar">|</span>
+				
+				<a id="find_id" href="../findid">아이디 찾기</a>
+				    
+				<span class="bar">|</span>
+				  
+				<a id="find_pw" href="../findpw">비밀번호 찾기</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

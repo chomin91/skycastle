@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'accounts/style.css' %}">
+	<script type="text/javascript" src="{% static 'accounts/jquery-3.3.1.min.js' %}"></script>
+	<script>
+		function certPopupOpen() {
+			window.open("{% url 'add_certificate' %}", "_blank", "width=300, height=360");
+		}
+	</script>
+</head>
+<body>
+	<div id="header_small">
+		<h1>
+			<a class="main_logo"></a>
+		</h1>
+	</div>
+	<div id="container">
+		<div id="content">
+			<form method="post" action="{% url 'addinfo_coordi' %}" onsubmit="return addinfoValidation()">
+			<div class="row_group">
+				<h2>
+					<label>기본정보</label>
+				</h2>
+				<div class="info_row">
+					<h3 class="info_title">
+						<label for="name">이름</label>
+					</h3>
+					<span id="box_name" class="box_info" style="">
+						<input id="name" class="input_info" type="text" name="name" maxlength="20">
+					</span>
+				</div>
+				<div class="info_row">
+					<h3 class="info_title">
+						<label for="gender">성별</label>
+					</h3>
+					<select id="gender" class="sel_gender" name="gender" aria-label="성별">
+						<option value="" selected="">선택</option>
+						<option value="0">남자</option>
+						<option value="1">여자</option>
+					</select>
+				</div>
+				<div class="info_row">
+					<h3 class="info_title">
+						<label for="birth">생년월일</label>
+					</h3>
+					<div class="wrap_birth">
+						<div class="cell_birth">
+						<span id="box_birth_year" class="box_birth" style="">
+							<input id="birth_year" class="input_info" type="text" name="birth_year" placeholder="년(4자)" maxlength="4">
+						</span>
+						</div>
+						<div class="cell_birth">
+						<span id="box_birth_month" class="box_birth" style="">
+							<input id="birth_month" class="input_info" type="text" name="birth_moth" placeholder="월" maxlength="2">
+						</span>
+						</div>
+						<div class="cell_birth">
+						<span id="box_birth_day" class="box_birth" style="">
+							<input id="birth_day" class="input_info" type="text" name="birth_day" placeholder="일" maxlength="2">
+						</span>
+						</div>
+					</div>
+				</div>
+				<div class="info_row">
+					<h3 class="info_title">
+						<label for="name">휴대전화</label>
+					</h3>
+					<div class="wrap_phone">
+						<span id="box_phone" class="box_phone" style="">
+							<input id="phone" class="input_info" type="text" name="phone" maxlength="18" placeholder="전화번호 입력">
+						</span>
+						<span>
+							<button class="btn_phone">
+								<span>휴대폰 인증</span>
+							</button>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div style="height:25px">
+			</div>
+			<div class="row_group">
+				<h2>
+					<label>학력정보</label>
+				</h2>
+				<div class="info_row">
+					<h3 class="info_title">
+						<label for="univ_certificate_img">학교 인증하기</label>
+					</h3>
+
+					{% csrf_token %}
+					<button class="btn_addimg" onclick="certPopupOpen();">
+						재학/재적/졸업 증명서<br>
+						등록하기
+					</button>
+				</div>
+				<div class="info_row">
+					<h3 class="info_title">
+						<label for="univ">대학교</label>
+					</h3>
+					<select class="sel_univ">
+						<option value="">선택</option>
+						<option value="서울대">서울대</option>
+						<option value="연세대">연세대</option>
+						<option value="고려대">고려대</option>
+						<option value="카이스트">카이스트</option>
+						<option value="포항공대">포항공대</option>
+						<option value="의치한">직접입력(의치한)</option>
+					</select>
+				</div>
+				<div class="info_row">
+					<h3 class="info_title">
+						<label for="major">학과</label>
+					</h3>
+					<span id="box_major" class="box_info" style="">
+						<input id="major" class="input_info" type="text" name="major" maxlength="20">
+					</span>
+				</div>
+				<div class="info_row">
+					<h3 class="info_title">
+						<label for="univ">학번(입학년도)</label>
+					</h3>
+					<span id="box_univ" class="box_info box_schoolyear" style="">
+						<input id="univ" class="input_info" type="text" name="univ" placeholder="ex) 19" maxlength="20">
+						<span class="txt_schoolyear">학번</span>
+					</span>
+				</div>
+				<div class="info_row">
+					<h3 class="info_title">
+						<label for="">수능 성적</label>
+					</h3>
+					<span id="box_univ" class="box_info" style="">
+						<input id="univ" class="input_info" type="text" name="univ" placeholder="ex) 19학번" maxlength="20">
+					</span>
+				</div>
+				<div class="info_row">
+					<h3 class="info_title">
+						<label for="univ">내신 성적</label>
+					</h3>
+					<span id="box_univ" class="box_info" style="">
+						<input id="univ" class="input_info" type="text" name="univ" placeholder="ex) 19학번" maxlength="20">
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+

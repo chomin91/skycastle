@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'accounts/style.css' %}">
+	<script type="text/javascript" src="{% static 'accounts/jquery-3.3.1.min.js' %}"></script>
+	{% csrf_token %}
+	<script>
+	var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+	
+	function csrfSafeMethod(method) {
+		return (/^(GET|HEAD|OPTINOS|TRACE)$/.test(method));
+	}
+
+	var idCheck = 0
+	var pwCheck = 0
+	var repwCheck = 0
+
+	$(function(){
+		$("#id").focus(function(){
+			$("#box_id").css("border", "solid 1px #2b72ed");
+		});
+
+		$("#pw").focus(function(){
+			$("#box_pw").css("border", "solid 1px #2b72ed");
+		});
+		
+		$("#pwcheck").focus(function(){
+			$("#box_pwcheck").css("border", "solid 1px #2b72ed");
+		});
+
+		$("#id").focusout(idCheckFunc = function(){
+			$("#box_id").css("border", "");
+
+			var id=$("#id").val();
+			var idFormatCheck = /^([a-zA-Z0-9_\.-]{1,50})@([a-zA-Z0-9_\.-]{1,50})\.([a-zA-Z0-9]{1,10})$/;
+			idCheck = 0;	
+
+			$.ajaxSetup({
+				beforeSend: function(xhr, settings) {
+					if (!csrfSafeMethod(settings.type) && !this.crossDomain){
+						xhr.setRequestHeader("X-CSRFToken", csrftoken);
+					}
+				}
+			});
+			
+			if (id == "") {
+				$("#idMsg").css("display", "block");
+				$("#idMsg").text("이메일 주소를 입력해주세요.");
+			} else if (!idFormatCheck.test(id)) {
+				$("#idMsg").css("display", "block");
+				$("#idMsg").text("이메일 주소가 올바르지 않습니다.");
+			} else {
+					$.ajax({
+						url:'/api/check_id/',
+						type:'POST',
+						data:{'id':$('#id').val()},
+						success:function(result){
+							if (result == "True") {
+								$("#idMsg").css("display", "block");
+								$("#idMsg").text("이미 존재하는 아이디입니다.");
+							} else {
+								$("#idMsg").css("display", "none");
+								$("#idMsg").text("");
+								idCheck = 1;
+							}
+						}
+					});
+				
+			}
+		});
+
+		$("#pw").focusout(pwCheckFunc = function(){
+			$("#box_pw").css("border", "");
+			
+			var pw=$("#pw").val();
+			var pwFormat= /^[a-zA-Z0-9~`!@#$%^&*()_+=\.-]{8,30}$/
+			pwCheck = 0;
+			
+			if (pw == "") {
+				$("#pwMsg").css("display","block");
+				$("#pwMsg").text("비밀번호를 입력해주세요.");
+			} else if (!pwFormat.test(pw)) {
+				$("#pwMsg").css("display","block");
+				$("#pwMsg").text("비밀번호는 8자 이상이어야 합니다.");
+			} else {
+				$("#pwMsg").css("display","none");
+				$("#pwMsg").text("");
+				pwCheck = 1;
+			}
+		});
+
+		$("#pwcheck").focusout(function(){
+			$("#box_pwcheck").css("border", "");
+		});
+
+		$("#pwcheck").keyup(rePwCheckFunc = function(){
+			
+			var pw=$("#pw").val();
+			var pwcheck=$("#pwcheck").val();
+			repwCheck = 0;
+			
+			if (pwcheck == ""){
+				$("#pwcheckMsg").css("display", "block");
+				$("#pwcheckMsg").text("비밀번호를 다시 한번 입력해주세요.");
+			}else {
+				if(pw != pwcheck) {
+					$("#pwcheckMsg").css("display","block");
+					$("#pwcheckMsg").text("비밀번호가 일치하지 않습니다.");
+				} else {
+					$("#pwcheckMsg").css("display","none");
+					repwCheck = 1;
+				}
+			}
+		});
+	});
+
+	function joinValidation() {
+		if (!(idCheck && pwCheck && repwCheck)) {
+			idCheckFunc.call();
+			pwCheckFunc.call();
+			rePwCheckFunc.call();
+			return false;
+		} else {
+			return true;
+		}
+	};
+	</script>
+</head>
+<body class="">
+	<div id="header_small">
+		<h1>
+			<a class="main_logo"></a>
+		</h1>
+	</div>
+	<div id="container">
+		<div id="content">
+			<form method="post" action= "{% url 'coordinator_signup'%}" onsubmit="return joinValidation()">
+			{% csrf_token %}
+			<div class="row_group">
+				<div class="join_row">
+					<h3 class="join_title">
+						<label for="id">이메일</label>
+					</h3>
+					<span class="box_join" id="box_id">
+						<input id="id" class="int_join" type="text" name="email" maxlength="50">
+					</span>
+					<span id="idMsg" class="error" style="display:none" role="alert"></span>
+				</div>
+				<div class="join_row">
+					<h3 class="join_title">
+						<label for="pw">비밀번호</label>
+					</h3>
+					<span class="box_join" id="box_pw">
+						<input id="pw" class="int_join" type="password" name="password" maxlength="20">
+						<span id="pwsafe" class="step_txt txt_green"></span>
+					</span>
+					<span id="pwMsg" class="error" style="display:none" role="alert"></span>
+				</div>
+				<div class="join_row">
+					<h3 class="join_title">
+						<label for="pw">비밀번호 재확인</label>
+					</h3>
+					<span class="box_join" id="box_pwcheck">
+						<input id="pwcheck" class="int_join" type="password" name="pwcheck" maxlength="20">
+					</span>
+					<span id="pwcheckMsg" class="error" style="display:none" role="alert"></span>
+				</div>
+			</div>
+			<div class=btn_area>
+				<button id="signup_button" class="btn_global" type='submit'>
+					<span>가입하기</span>
+				</button>
+			</div>
+			</form>	
+		</div>
+	</div>
+</body>
+</html>
+
+

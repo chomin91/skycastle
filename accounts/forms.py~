@@ -1,0 +1,25 @@
+from django import forms
+from .models import User
+from .models import CoordinatorInfo
+
+class SignupForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput, label='비밀번호')
+    class Meta:
+        model = User
+        fields = [
+                'email',
+                ]
+
+        labels = {
+                'email': '이메일',
+                }
+
+class coordiInfoForm(forms.ModelForm):
+    class Meta:
+        model = CoordinatorInfo
+        fields = [
+                'age',
+                ]
+        labels = {
+                'age': '성별',
+                }

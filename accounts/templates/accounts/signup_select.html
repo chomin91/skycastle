@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'accounts/style.css' %}">
+</head>
+<body class="">
+	<div id="header_small">
+		<h1>
+			<a class="main_logo"></a>
+		</h1>
+	</div>
+	<div class="select_area">
+		<input class="btn_basic" id="btn_parent" type="button" value="학부모" onClick="location.href='parent'">
+		<input class="btn_basic" id="btn_coordi" type="button" value="코디네이터" onClick="location.href='coordinator'">
+	</div>
+</html>
